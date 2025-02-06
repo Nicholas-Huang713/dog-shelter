@@ -44,7 +44,16 @@ export default function DogList({
   return (
     <>
       {isLoading ? (
-        <Box sx={{ display: "flex", justifyContent: "center", marginTop: 4 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            height: "calc(100vh - 250px)",
+            maxHeight: "calc(100vh - 250px)",
+            overflowY: "auto",
+            padding: "20px 10px",
+          }}
+        >
           <CircularProgress />
         </Box>
       ) : (

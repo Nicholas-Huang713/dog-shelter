@@ -1,10 +1,11 @@
-import { createContext, useState, ReactNode } from "react";
+import { createContext, useState, ReactNode, useEffect } from "react";
 import { DogData } from "../types/dogData";
 import {
   fetchDogDetailsList,
   fetchNextSetOfData,
   fetchPreviousSetOfData,
-  fetchDogListOrderByBreed,
+  fetchDogListSorted,
+  fetchDogListFilteredByBreed,
 } from "../api/dogRoutes";
 
 interface DogContextType {
@@ -24,6 +25,9 @@ interface DogContextType {
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   getDefaultDogList: () => void;
+  sortOption: string;
+  setSortOption: React.Dispatch<React.SetStateAction<string>>;
+  fetchIdsFilteredAndConvertToDetails: (filterType: string) => void;
 }
 
 export const DogContext = createContext<DogContextType | null>(null);
@@ -37,17 +41,40 @@ export const DogProvider = ({ children }: { children: ReactNode }) => {
   const [favoriteDogList, setFavoriteDogList] = useState<string[]>([]);
   const [nextUrl, setNextUrl] = useState<string>("");
   const [prevUrl, setPrevUrl] = useState<string>("");
+  const [sortOption, setSortOption] = useState<string>("breedAsc");
 
   const handleError = (e: any) => {
     console.error(e.message || "An unknown error occurred");
   };
 
+  const fetchIdsSortedAndConvertToDetails = async (sortType: string) => {
+    try {
+      const res = await fetchDogListSorted(sortType);
+      setCurrentDogIdList(res?.resultIds ?? []);
+      convertDogIdsToDetails(res?.resultIds ?? []);
+      setNextUrl(res?.next ?? "");
+    } catch (e) {
+      handleError(e);
+    }
+  };
+
+  const fetchIdsFilteredAndConvertToDetails = async (filterType: string) => {
+    setIsLoading(true);
+    try {
+      const res = await fetchDogListFilteredByBreed(filterType);
+      setCurrentDogIdList(res?.resultIds ?? []);
+      convertDogIdsToDetails(res?.resultIds ?? []);
+      setNextUrl(res?.next ?? "");
+    } catch (e) {
+      handleError(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const getDefaultDogList = async () => {
     setIsLoading(true);
     try {
-      const res = await fetchDogListOrderByBreed("asc");
-      convertDogIdsToDetails(res?.resultIds ?? []);
-      setNextUrl(res?.next ?? "");
+      fetchIdsSortedAndConvertToDetails("breed:asc");
     } catch (e: any) {
       handleError(e);
     } finally {
@@ -56,7 +83,6 @@ export const DogProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const convertDogIdsToDetails = async (resultIdList: string[]) => {
-    setCurrentDogIdList(resultIdList);
     try {
       const res = await fetchDogDetailsList(resultIdList);
       setCurrentDogDetailList(res ?? []);
@@ -72,16 +98,14 @@ export const DogProvider = ({ children }: { children: ReactNode }) => {
       setCurrentDogIdList(prevResp?.resultIds ?? []);
       setNextUrl(prevResp?.next ?? "");
       setPrevUrl(prevResp?.prev ?? "");
-      const newDogDetailsList = await fetchDogDetailsList(
-        prevResp?.resultIds ?? []
-      );
-      setCurrentDogDetailList(newDogDetailsList);
+      await convertDogIdsToDetails(prevResp?.resultIds ?? []);
     } catch (e: any) {
       handleError(e);
     } finally {
       setIsLoading(false);
     }
   };
+
   const handleNext = async () => {
     setIsLoading(true);
     try {
@@ -89,16 +113,83 @@ export const DogProvider = ({ children }: { children: ReactNode }) => {
       setCurrentDogIdList(nextResp?.resultIds ?? []);
       setNextUrl(nextResp?.next ?? "");
       setPrevUrl(nextResp?.prev ?? "");
-      const newDogDetailsList = await fetchDogDetailsList(
-        nextResp?.resultIds ?? []
-      );
-      setCurrentDogDetailList(newDogDetailsList);
+      await convertDogIdsToDetails(nextResp?.resultIds ?? []);
     } catch (e: any) {
       handleError(e);
     } finally {
       setIsLoading(false);
     }
   };
+
+  const handleSortByField = async (field: string) => {
+    switch (field) {
+      case "breedAsc":
+        setIsLoading(true);
+        try {
+          await fetchIdsSortedAndConvertToDetails("breed:asc");
+        } catch (e: any) {
+          handleError(e);
+        } finally {
+          setIsLoading(false);
+        }
+        break;
+      case "breedDesc":
+        setIsLoading(true);
+        try {
+          await fetchIdsSortedAndConvertToDetails("breed:desc");
+        } catch (e: any) {
+          handleError(e);
+        } finally {
+          setIsLoading(false);
+        }
+        break;
+      case "nameAsc":
+        setIsLoading(true);
+        try {
+          await fetchIdsSortedAndConvertToDetails("name:asc");
+        } catch (e: any) {
+          handleError(e);
+        } finally {
+          setIsLoading(false);
+        }
+        break;
+      case "nameDesc":
+        setIsLoading(true);
+        try {
+          await fetchIdsSortedAndConvertToDetails("name:desc");
+        } catch (e: any) {
+          handleError(e);
+        } finally {
+          setIsLoading(false);
+        }
+        break;
+      case "ageAsc":
+        setIsLoading(true);
+        try {
+          await fetchIdsSortedAndConvertToDetails("age:asc");
+        } catch (e: any) {
+          handleError(e);
+        } finally {
+          setIsLoading(false);
+        }
+        break;
+      case "ageDesc":
+        setIsLoading(true);
+        try {
+          await fetchIdsSortedAndConvertToDetails("age:desc");
+        } catch (e: any) {
+          handleError(e);
+        } finally {
+          setIsLoading(false);
+        }
+        break;
+      default:
+        null;
+    }
+  };
+  useEffect(() => {
+    handleSortByField(sortOption);
+  }, [sortOption, setSortOption]);
 
   return (
     <DogContext.Provider
@@ -119,6 +210,9 @@ export const DogProvider = ({ children }: { children: ReactNode }) => {
         isLoading,
         setIsLoading,
         getDefaultDogList,
+        sortOption,
+        setSortOption,
+        fetchIdsFilteredAndConvertToDetails,
       }}
     >
       {children}

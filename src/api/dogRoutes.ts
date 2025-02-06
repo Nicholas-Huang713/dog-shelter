@@ -1,6 +1,5 @@
 import { apiClient } from "./";
 import { DogSearchResponse, DogQueryParamTypes } from "../types/dogSearch";
-// import { DogData } from "../types/dogData";
 
 export const fetchDogIdList = async (params?: DogQueryParamTypes) => {
   try {
@@ -22,13 +21,15 @@ export const fetchDogDetailsList = async (currentList: string[]) => {
   }
 };
 
-export const fetchDogListOrderByBreed = (sortOrder: string) =>
-  fetchDogIdList({ sort: `breed:${sortOrder}`, size: 10 });
+export const fetchDogListSorted = (sortType: string) =>
+  fetchDogIdList({ sort: sortType, size: 10 });
+
+export const fetchDogListFilteredByBreed = (filterType: string) =>
+  fetchDogIdList({ breeds: [filterType], size: 10 });
 
 export const fetchNextSetOfData = async (nextUrl: string) => {
   try {
     const res = await apiClient.get<DogSearchResponse>(nextUrl);
-    console.log("next api resp", res.data);
     return res.data;
   } catch (e: any) {
     console.error(e.message);
@@ -38,7 +39,15 @@ export const fetchNextSetOfData = async (nextUrl: string) => {
 export const fetchPreviousSetOfData = async (prevUrl: string) => {
   try {
     const res = await apiClient.get<DogSearchResponse>(prevUrl);
-    console.log("prev api resp", res.data);
+    return res.data;
+  } catch (e: any) {
+    console.error(e.message);
+  }
+};
+
+export const fetchBreedList = async () => {
+  try {
+    const res = await apiClient.get("/dogs/breeds");
     return res.data;
   } catch (e: any) {
     console.error(e.message);
