@@ -7,22 +7,25 @@ import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import { AuthProvider } from "./context/AuthContext";
+import { DogProvider } from "./context/DogContext";
 function App() {
   return (
     <>
       <CssBaseline />
       <AuthProvider>
-        <Router>
-          <NavBar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route
-              path="/dashboard"
-              element={<ProtectedRoute element={<Dashboard />} />}
-            />
-          </Routes>
-        </Router>
+        <DogProvider>
+          <Router>
+            <NavBar />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route
+                path="/dashboard"
+                element={<ProtectedRoute element={<Dashboard />} />}
+              />
+            </Routes>
+          </Router>
+        </DogProvider>
       </AuthProvider>
     </>
   );
