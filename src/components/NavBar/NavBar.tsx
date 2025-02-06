@@ -42,13 +42,28 @@ const NavBar = () => {
     setAnchorElUser(null);
   };
 
-  const handleMenuItemClick = (menuItem: string) => {
+  const handleMenuItemClick = async (menuItem: string) => {
     switch (menuItem) {
+      case "Dashboard":
+        handleRemoveUser();
+        try {
+          const res = await handleLogout();
+          if (res.status === 200) goLogin();
+        } catch (e: any) {
+          console.error(e.message);
+        }
+        break;
       case "Logout":
         handleRemoveUser();
-        handleLogout();
-        goLogin();
+        try {
+          const res = await handleLogout();
+          if (res.status === 200) goLogin();
+        } catch (e: any) {
+          console.error(e.message);
+        }
         break;
+      default:
+        return null;
     }
   };
 
