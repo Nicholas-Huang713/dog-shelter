@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useAuthRedirect } from "../../hooks/useAuthRedirect";
 import DogSearchList from "../../components/DogSearchList/DogSearchList";
-import DetailsModal from "../../components/DetailsModal/DetailsModal";
 import FilterButton from "../../components/FilterButton/FilterButton";
 import SortDropdown from "../../components/SortDropdown/SortDropdown";
 import { Typography, Box } from "@mui/material";
@@ -35,7 +34,6 @@ export default function Dashboard() {
         </Box>
       </Box>
       <DogSearchList />
-      <DetailsModal />
     </div>
   );
 }
