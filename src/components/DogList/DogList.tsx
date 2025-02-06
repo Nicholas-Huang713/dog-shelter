@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   List,
   ListItem,
@@ -13,10 +13,10 @@ import {
   Box,
   CircularProgress,
 } from "@mui/material";
-import { Favorite, FavoriteBorder } from "@mui/icons-material";
+import FavoriteButton from "../FavoriteButton/FavoriteButton";
 import { DogData } from "../../types/dogData";
 import { useDogContext } from "../../hooks/useDogContext";
-
+import DetailsModal from "../DetailsModal/DetailsModal";
 interface DogListProps {
   dogList: DogData[];
   handlePrevious: () => void;
@@ -33,12 +33,15 @@ export default function DogList({
   prevUrl,
 }: DogListProps) {
   const { isLoading } = useDogContext();
-  const handleFavorite = (id: string) => {
-    console.log("Favorite item with id:", id);
-  };
+  const [currentDogDetails, setCurrentDogDetails] = useState<DogData | null>(
+    null
+  );
+  const [openModal, setOpenModal] = useState(false);
+  const handleOpen = () => setOpenModal(true);
 
-  const handleImageClick = (dogId: string) => {
-    console.log(`Clicked on image for dog with ID: ${dogId}`);
+  const handleImageClick = (dogDetails: DogData) => {
+    setCurrentDogDetails(dogDetails);
+    handleOpen();
   };
 
   return (
@@ -81,7 +84,7 @@ export default function DogList({
                             alt={dog.name}
                             src={dog.img}
                             sx={{ cursor: "pointer" }}
-                            onClick={() => handleImageClick(dog.id)}
+                            onClick={() => handleImageClick(dog)}
                           />
                         </Tooltip>
                       </ListItemAvatar>
@@ -90,14 +93,7 @@ export default function DogList({
                         secondary={`Breed: ${dog.breed} | Zipcode: ${dog.zip_code} | Age: ${dog.age}`}
                       />
                       <ListItemIcon>
-                        <Tooltip title="Add to Favorites" arrow>
-                          <IconButton
-                            onClick={() => handleFavorite(dog.id)}
-                            edge="end"
-                          >
-                            <FavoriteBorder />
-                          </IconButton>
-                        </Tooltip>
+                        <FavoriteButton dogId={dog.id} />
                       </ListItemIcon>
                     </ListItem>
                     <Divider />
@@ -125,6 +121,12 @@ export default function DogList({
           Next
         </Button>
       </div>
+      <DetailsModal
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+        currentDogDetails={currentDogDetails}
+        setCurrentDogDetails={setCurrentDogDetails}
+      />
     </>
   );
 }

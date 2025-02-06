@@ -1,19 +1,29 @@
-import { useState } from "react";
-import { Button, Modal, Box, Typography } from "@mui/material";
+import { Modal, Box, Typography, IconButton } from "@mui/material";
+import { DogData } from "../../types/dogData";
+import Close from "@mui/icons-material/Close";
+import FavoriteButton from "../FavoriteButton/FavoriteButton";
+interface DetailsModalProps {
+  openModal: boolean;
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+  currentDogDetails: DogData | null;
+  setCurrentDogDetails: React.Dispatch<React.SetStateAction<DogData | null>>;
+}
 
-const DetailsModal = () => {
-  const [open, setOpen] = useState(false);
-
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+const DetailsModal = ({
+  openModal,
+  setOpenModal,
+  currentDogDetails,
+  setCurrentDogDetails,
+}: DetailsModalProps) => {
+  const handleClose = () => {
+    setCurrentDogDetails(null);
+    setOpenModal(false);
+  };
 
   return (
     <>
-      <Button variant="contained" onClick={handleOpen}>
-        Open Modal
-      </Button>
       <Modal
-        open={open}
+        open={openModal}
         onClose={handleClose}
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
@@ -29,21 +39,65 @@ const DetailsModal = () => {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            // width: 400,
             bgcolor: "background.paper",
             boxShadow: 24,
-            p: 4,
+            p: 3,
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" }, // Column for small screens, row for larger
+            alignItems: "center",
+            gap: 2,
+            width: { xs: "90vw", sm: 400, md: 500 }, // Adjust width for different screens
+            maxWidth: 500,
+            borderRadius: 2,
           }}
         >
-          <Typography id="modal-title" variant="h6" component="h2">
-            My Modal Title
-          </Typography>
-          <Typography id="modal-description" sx={{ mt: 2 }}>
-            This is the content inside the modal.
-          </Typography>
-          <Button variant="contained" onClick={handleClose} sx={{ mt: 2 }}>
-            Close
-          </Button>
+          <IconButton
+            onClick={handleClose}
+            sx={{
+              position: "absolute",
+              top: 10,
+              right: 10,
+              color: "text.primary",
+            }}
+          >
+            <Close />
+          </IconButton>
+          <Box
+            component="img"
+            src={currentDogDetails?.img || "/placeholder.jpg"}
+            alt="Pet"
+            sx={{
+              width: 250,
+              height: 250,
+              objectFit: "cover",
+              borderRadius: 2,
+            }}
+          />
+
+          <Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between", // Pushes button to the right
+                gap: 1,
+              }}
+            >
+              <Typography variant="h6" id="modal-title">
+                Name: {currentDogDetails?.name || "N/A"}
+              </Typography>
+              <FavoriteButton dogId={currentDogDetails?.id || ""} />
+            </Box>
+            <Typography variant="body1">
+              Age: {currentDogDetails?.age || "N/A"}
+            </Typography>
+            <Typography variant="body1">
+              Zipcode: {currentDogDetails?.zip_code || "N/A"}
+            </Typography>
+            <Typography variant="body1">
+              Breed: {currentDogDetails?.breed || "N/A"}
+            </Typography>
+          </Box>
         </Box>
       </Modal>
     </>
