@@ -7,5 +7,6 @@ export const useNavigateTo = () => {
     goHome: () => navigate("/"),
     goDashboard: () => navigate("/dashboard"),
     goLogin: () => navigate("/login"),
+    goFavorites: () => navigate("/favorites"),
   };
 };

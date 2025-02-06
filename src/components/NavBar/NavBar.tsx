@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -17,13 +17,16 @@ import { handleLogout } from "../../api/auth";
 import { useNavigateTo } from "../../hooks/useNavigateTo";
 
 const loggedOutPages = ["Home"];
-const loggedInPages = ["Home", "Dashboard"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const loggedInPages = ["Home", "Dashboard", "Favorites"];
+const settings = ["Profile", "Logout"];
 
 const NavBar = () => {
   const { isAuthenticated, handleRemoveUser } = useAuth();
-  const pages = isAuthenticated ? loggedInPages : loggedOutPages;
-  const { goLogin } = useNavigateTo();
+  const pages = useMemo(
+    () => (isAuthenticated ? loggedInPages : loggedOutPages),
+    [isAuthenticated]
+  );
+  const { goLogin, goDashboard, goHome, goFavorites } = useNavigateTo();
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -42,30 +45,35 @@ const NavBar = () => {
     setAnchorElUser(null);
   };
 
-  const handleMenuItemClick = async (menuItem: string) => {
-    switch (menuItem) {
-      case "Dashboard":
-        handleRemoveUser();
-        try {
-          const res = await handleLogout();
-          if (res.status === 200) goLogin();
-        } catch (e: any) {
-          console.error(e.message);
-        }
-        break;
-      case "Logout":
-        handleRemoveUser();
-        try {
-          const res = await handleLogout();
-          if (res.status === 200) goLogin();
-        } catch (e: any) {
-          console.error(e.message);
-        }
-        break;
-      default:
-        return null;
-    }
-  };
+  const handleMenuItemClick = useCallback(
+    async (menuItem: string) => {
+      switch (menuItem) {
+        case "Dashboard":
+          handleCloseNavMenu();
+          goDashboard();
+          break;
+        case "Home":
+          goHome();
+          break;
+        case "Favorites":
+          goFavorites();
+          break;
+        case "Logout":
+          handleCloseNavMenu();
+          handleRemoveUser();
+          try {
+            const res = await handleLogout();
+            if (res.status === 200) goLogin();
+          } catch (e: any) {
+            console.error(e.message);
+          }
+          break;
+        default:
+          return;
+      }
+    },
+    [goDashboard, goHome, goFavorites, handleRemoveUser, goLogin]
+  );
 
   return (
     <>
@@ -116,7 +124,10 @@ const NavBar = () => {
                 sx={{ display: { xs: "block", md: "none" } }}
               >
                 {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
+                  <MenuItem
+                    key={page}
+                    onClick={() => handleMenuItemClick(page)}
+                  >
                     <Typography sx={{ textAlign: "center" }}>{page}</Typography>
                   </MenuItem>
                 ))}
@@ -144,7 +155,7 @@ const NavBar = () => {
               {pages.map((page) => (
                 <Button
                   key={page}
-                  onClick={handleCloseNavMenu}
+                  onClick={() => handleMenuItemClick(page)}
                   sx={{ my: 2, color: "white", display: "block" }}
                 >
                   {page}

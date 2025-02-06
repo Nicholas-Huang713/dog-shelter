@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button, Modal, Box, Typography } from "@mui/material";
 
 const DetailsModal = () => {
@@ -8,7 +8,7 @@ const DetailsModal = () => {
   const handleClose = () => setOpen(false);
 
   return (
-    <div>
+    <>
       <Button variant="contained" onClick={handleOpen}>
         Open Modal
       </Button>
@@ -17,6 +17,11 @@ const DetailsModal = () => {
         onClose={handleClose}
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
+        slotProps={{
+          backdrop: {
+            sx: { backgroundColor: "rgba(0, 0, 0, 0.75)" },
+          },
+        }}
       >
         <Box
           sx={{
@@ -24,9 +29,8 @@ const DetailsModal = () => {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: 400,
+            // width: 400,
             bgcolor: "background.paper",
-            border: "2px solid #000",
             boxShadow: 24,
             p: 4,
           }}
@@ -42,7 +46,7 @@ const DetailsModal = () => {
           </Button>
         </Box>
       </Modal>
-    </div>
+    </>
   );
 };
 
