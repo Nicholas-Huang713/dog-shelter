@@ -7,16 +7,16 @@ interface FavoriteButtonProps {
 }
 
 export default function FavoriteButton({ dogId }: FavoriteButtonProps) {
-  const { favoriteDogList, setFavoriteDogList } = useDogContext();
+  const { favoriteDogIdList, setFavoriteDogIdList } = useDogContext();
   const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
 
   const favoriteDogSet = useMemo(
-    () => new Set(favoriteDogList),
-    [favoriteDogList]
+    () => new Set(favoriteDogIdList),
+    [favoriteDogIdList]
   );
 
   const toggleFavorite = (id: string) => {
-    setFavoriteDogList((prevFavorites: string[]) => {
+    setFavoriteDogIdList((prevFavorites: string[]) => {
       const favoriteDogSet = new Set(prevFavorites);
       if (favoriteDogSet.has(id)) {
         favoriteDogSet.delete(id);

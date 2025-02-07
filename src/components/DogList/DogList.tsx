@@ -5,8 +5,6 @@ import {
   ListItemText,
   ListItemIcon,
   Divider,
-  IconButton,
-  Button,
   ListItemAvatar,
   Avatar,
   Tooltip,
@@ -19,19 +17,9 @@ import { useDogContext } from "../../hooks/useDogContext";
 import DetailsModal from "../DetailsModal/DetailsModal";
 interface DogListProps {
   dogList: DogData[];
-  handlePrevious: () => void;
-  handleNext: () => void;
-  nextUrl: string | null;
-  prevUrl: string | null;
 }
 
-export default function DogList({
-  dogList,
-  handlePrevious,
-  handleNext,
-  nextUrl,
-  prevUrl,
-}: DogListProps) {
+export default function DogList({ dogList }: DogListProps) {
   const { isLoading } = useDogContext();
   const [currentDogDetails, setCurrentDogDetails] = useState<DogData | null>(
     null
@@ -104,23 +92,6 @@ export default function DogList({
           </Box>
         </>
       )}
-      <div style={{ marginTop: 20 }}>
-        <Button
-          variant="contained"
-          onClick={() => handlePrevious()}
-          disabled={prevUrl === ""}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="contained"
-          onClick={() => handleNext()}
-          disabled={nextUrl === ""}
-          style={{ marginLeft: 10 }}
-        >
-          Next
-        </Button>
-      </div>
       <DetailsModal
         openModal={openModal}
         setOpenModal={setOpenModal}

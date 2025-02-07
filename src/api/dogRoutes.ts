@@ -1,6 +1,8 @@
 import { apiClient } from "./";
 import { DogSearchResponse, DogQueryParamTypes } from "../types/dogSearch";
 
+const handleError = (e: any) => console.error(e.message);
+
 export const fetchDogIdList = async (params?: DogQueryParamTypes) => {
   try {
     const res = await apiClient.get<DogSearchResponse>("/dogs/search", {
@@ -8,7 +10,7 @@ export const fetchDogIdList = async (params?: DogQueryParamTypes) => {
     });
     return res.data;
   } catch (e: any) {
-    console.error(e.message);
+    handleError(e);
   }
 };
 
@@ -17,7 +19,7 @@ export const fetchDogDetailsList = async (currentList: string[]) => {
     const res = await apiClient.post("/dogs", currentList);
     return res.data;
   } catch (e: any) {
-    console.error(e.message);
+    handleError(e);
   }
 };
 
@@ -32,7 +34,7 @@ export const fetchNextSetOfData = async (nextUrl: string) => {
     const res = await apiClient.get<DogSearchResponse>(nextUrl);
     return res.data;
   } catch (e: any) {
-    console.error(e.message);
+    handleError(e);
   }
 };
 
@@ -41,7 +43,7 @@ export const fetchPreviousSetOfData = async (prevUrl: string) => {
     const res = await apiClient.get<DogSearchResponse>(prevUrl);
     return res.data;
   } catch (e: any) {
-    console.error(e.message);
+    handleError(e);
   }
 };
 
@@ -50,6 +52,25 @@ export const fetchBreedList = async () => {
     const res = await apiClient.get("/dogs/breeds");
     return res.data;
   } catch (e: any) {
-    console.error(e.message);
+    handleError(e);
+  }
+};
+
+export const fetchFavoriteDogDetails = async (faveIdList: string[]) => {
+  try {
+    const res = await apiClient.post("/dogs", faveIdList);
+    return res.data;
+  } catch (e: any) {
+    handleError(e);
+  }
+};
+
+export const fetchMatchFromFaves = async (faveIdList: string[]) => {
+  try {
+    const res = await apiClient.post("/dogs/match", faveIdList);
+    console.log("fetchMatchFromFaves", res.data); //should be this format string[]
+    return res.data;
+  } catch (e: any) {
+    handleError(e);
   }
 };

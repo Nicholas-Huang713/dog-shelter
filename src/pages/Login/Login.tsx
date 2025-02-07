@@ -16,7 +16,7 @@ import { handleLogin } from "../../api/auth";
 
 export default function Login() {
   const { handleSetUser } = useAuth();
-  const { goDashboard } = useNavigateTo();
+  const { goDogSearch } = useNavigateTo();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -33,7 +33,7 @@ export default function Login() {
       const res = await handleLogin(data);
       if (res.status === 200) {
         handleSetUser(data);
-        goDashboard();
+        goDogSearch();
       }
     } catch (err) {
       setError("Invalid credentials");

@@ -6,7 +6,7 @@ import SortDropdown from "../../components/SortDropdown/SortDropdown";
 import { Typography, Box } from "@mui/material";
 import { useDogContext } from "../../hooks/useDogContext";
 
-export default function Dashboard() {
+export default function DogSearch() {
   useAuthRedirect();
   const { setSortOption } = useDogContext();
 
