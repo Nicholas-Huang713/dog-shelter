@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import DogList from "../DogList/DogList";
 import { useDogContext } from "../../hooks/useDogContext";
+import { Button } from "@mui/material";
+
 export default function DogSearchList() {
   const {
     currentDogDetailList,
@@ -17,13 +19,24 @@ export default function DogSearchList() {
 
   return (
     <>
-      <DogList
-        dogList={currentDogDetailList}
-        handleNext={handleNext}
-        handlePrevious={handlePrevious}
-        nextUrl={nextUrl}
-        prevUrl={prevUrl}
-      />
+      <DogList dogList={currentDogDetailList} />
+      <div style={{ marginTop: 20 }}>
+        <Button
+          variant="contained"
+          onClick={() => handlePrevious()}
+          disabled={prevUrl === ""}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => handleNext()}
+          disabled={nextUrl === ""}
+          style={{ marginLeft: 10 }}
+        >
+          Next
+        </Button>
+      </div>
     </>
   );
 }

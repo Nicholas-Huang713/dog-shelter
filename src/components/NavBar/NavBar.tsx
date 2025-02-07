@@ -17,7 +17,7 @@ import { handleLogout } from "../../api/auth";
 import { useNavigateTo } from "../../hooks/useNavigateTo";
 
 const loggedOutPages = ["Home"];
-const loggedInPages = ["Home", "Dashboard", "Favorites"];
+const loggedInPages = ["Home", "Search", "Favorites"];
 const settings = ["Profile", "Logout"];
 
 const NavBar = () => {
@@ -26,7 +26,7 @@ const NavBar = () => {
     () => (isAuthenticated ? loggedInPages : loggedOutPages),
     [isAuthenticated]
   );
-  const { goLogin, goDashboard, goHome, goFavorites } = useNavigateTo();
+  const { goLogin, goDogSearch, goHome, goFavorites } = useNavigateTo();
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -48,9 +48,9 @@ const NavBar = () => {
   const handleMenuItemClick = useCallback(
     async (menuItem: string) => {
       switch (menuItem) {
-        case "Dashboard":
+        case "Search":
           handleCloseNavMenu();
-          goDashboard();
+          goDogSearch();
           break;
         case "Home":
           goHome();
@@ -72,7 +72,7 @@ const NavBar = () => {
           return;
       }
     },
-    [goDashboard, goHome, goFavorites, handleRemoveUser, goLogin]
+    [goDogSearch, goHome, goFavorites, handleRemoveUser, goLogin]
   );
 
   return (

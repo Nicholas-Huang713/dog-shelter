@@ -1,6 +1,8 @@
 import { Typography, Button, Container, Box, Paper } from "@mui/material";
 import { Grid2 as Grid } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useAuth } from "../../hooks/useAuth";
+import { useNavigateTo } from "../../hooks/useNavigateTo";
 
 const theme = createTheme({
   palette: {
@@ -14,6 +16,11 @@ const theme = createTheme({
 });
 
 export default function Home() {
+  const { isAuthenticated } = useAuth();
+  const { goDogSearch, goLogin } = useNavigateTo();
+  const handleGetStartedClick = () => {
+    isAuthenticated ? goDogSearch() : goLogin();
+  };
   return (
     <ThemeProvider theme={theme}>
       <Container maxWidth="md">
@@ -24,7 +31,12 @@ export default function Home() {
           <Typography variant="h5" color="textSecondary">
             We provide the best dogs near you
           </Typography>
-          <Button variant="contained" color="primary" sx={{ mt: 3 }}>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{ mt: 3 }}
+            onClick={handleGetStartedClick}
+          >
             Get Started
           </Button>
         </Box>

@@ -6,6 +6,8 @@ import {
   fetchPreviousSetOfData,
   fetchDogListSorted,
   fetchDogListFilteredByBreed,
+  fetchFavoriteDogDetails,
+  fetchMatchFromFaves,
 } from "../api/dogRoutes";
 
 interface DogContextType {
@@ -13,8 +15,8 @@ interface DogContextType {
   setCurrentDogDetailList: React.Dispatch<React.SetStateAction<DogData[]>>;
   currentDogIdList: string[];
   setCurrentDogIdList: React.Dispatch<React.SetStateAction<string[]>>;
-  favoriteDogList: string[];
-  setFavoriteDogList: React.Dispatch<React.SetStateAction<string[]>>;
+  favoriteDogIdList: string[];
+  setFavoriteDogIdList: React.Dispatch<React.SetStateAction<string[]>>;
   nextUrl: string;
   setNextUrl: React.Dispatch<React.SetStateAction<string>>;
   prevUrl: string;
@@ -28,6 +30,10 @@ interface DogContextType {
   sortOption: string;
   setSortOption: React.Dispatch<React.SetStateAction<string>>;
   fetchIdsFilteredAndConvertToDetails: (filterType: string) => void;
+  favoriteDogDetailList: DogData[];
+  setFavoriteDogDetailList: React.Dispatch<React.SetStateAction<DogData[]>>;
+  getFavoriteDogs: () => void;
+  createMatch: () => void;
 }
 
 export const DogContext = createContext<DogContextType | null>(null);
@@ -38,7 +44,10 @@ export const DogProvider = ({ children }: { children: ReactNode }) => {
     []
   );
   const [currentDogIdList, setCurrentDogIdList] = useState<string[]>([]);
-  const [favoriteDogList, setFavoriteDogList] = useState<string[]>([]);
+  const [favoriteDogIdList, setFavoriteDogIdList] = useState<string[]>([]);
+  const [favoriteDogDetailList, setFavoriteDogDetailList] = useState<DogData[]>(
+    []
+  );
   const [nextUrl, setNextUrl] = useState<string>("");
   const [prevUrl, setPrevUrl] = useState<string>("");
   const [sortOption, setSortOption] = useState<string>("breedAsc");
@@ -71,6 +80,7 @@ export const DogProvider = ({ children }: { children: ReactNode }) => {
       setIsLoading(false);
     }
   };
+
   const getDefaultDogList = async () => {
     setIsLoading(true);
     try {
@@ -187,6 +197,27 @@ export const DogProvider = ({ children }: { children: ReactNode }) => {
         null;
     }
   };
+
+  const getFavoriteDogs = async () => {
+    setIsLoading(true);
+    try {
+      const res = await fetchFavoriteDogDetails(favoriteDogIdList);
+      setFavoriteDogDetailList(res ?? []);
+    } catch (e: any) {
+      handleError(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const createMatch = async () => {
+    try {
+      const res = await fetchMatchFromFaves(favoriteDogIdList);
+    } catch (e: any) {
+      handleError(e);
+    }
+  };
+
   useEffect(() => {
     handleSortByField(sortOption);
   }, [sortOption, setSortOption]);
@@ -198,8 +229,8 @@ export const DogProvider = ({ children }: { children: ReactNode }) => {
         setCurrentDogIdList,
         currentDogDetailList,
         setCurrentDogDetailList,
-        favoriteDogList,
-        setFavoriteDogList,
+        favoriteDogIdList,
+        setFavoriteDogIdList,
         nextUrl,
         setNextUrl,
         prevUrl,
@@ -213,6 +244,10 @@ export const DogProvider = ({ children }: { children: ReactNode }) => {
         sortOption,
         setSortOption,
         fetchIdsFilteredAndConvertToDetails,
+        favoriteDogDetailList,
+        setFavoriteDogDetailList,
+        getFavoriteDogs,
+        createMatch,
       }}
     >
       {children}
