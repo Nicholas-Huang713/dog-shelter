@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Tooltip, IconButton } from "@mui/material";
 import FilterPopover from "../FilterPopover/FilterPopover";
 import FilterListIcon from "@mui/icons-material/FilterList";
@@ -8,13 +8,16 @@ export default function FilterButton() {
 
   const isOpen = Boolean(anchorEl);
 
-  const handleFilterBtnClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const handleFilterBtnClick = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl(event.currentTarget);
+    },
+    []
+  );
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setAnchorEl(null);
-  };
+  }, []);
 
   return (
     <div>

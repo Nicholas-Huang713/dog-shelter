@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useDogContext } from "../../hooks/useDogContext";
 import DogList from "../../components/DogList/DogList";
 import { Box, Typography, Button, Snackbar, Alert } from "@mui/material";
@@ -21,14 +21,14 @@ export default function Favorites() {
     getFavoriteDogs();
   }, [favoriteDogIdList]);
 
-  const handleMatching = async () => {
+  const handleMatching = useCallback(async () => {
     if (favoriteDogIdList.length < 2) {
       setSnackBarOpen(true);
       return;
     }
     setMatchModalOpen(true);
-    createMatch();
-  };
+    await createMatch();
+  }, [favoriteDogIdList, createMatch]);
 
   const onMatchModalClose = () => setMatchModalOpen(false);
 
@@ -40,7 +40,7 @@ export default function Favorites() {
             borderBottom: "2px solid black",
             padding: "10px 0",
             display: "flex",
-            justifyContent: "flex-start",
+            justifyContent: "space-between",
           }}
         >
           <Typography variant="h4" gutterBottom>
@@ -49,7 +49,13 @@ export default function Favorites() {
           <Box
             sx={{ display: "flex", alignItems: "center", marginLeft: "auto" }}
           >
-            <Button onClick={handleMatching}>Create Match</Button>
+            <Button
+              onClick={handleMatching}
+              variant="contained"
+              color="primary"
+            >
+              Create Match
+            </Button>
           </Box>
         </Box>
         <DogList dogList={favoriteDogDetailList ?? []} isMatches={false} />
@@ -63,7 +69,7 @@ export default function Favorites() {
       >
         <Alert
           onClose={() => setSnackBarOpen(false)}
-          severity="success"
+          severity="warning"
           variant="filled"
         >
           At least 2 dogs needed to create match

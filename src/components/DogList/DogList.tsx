@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
   List,
   ListItem,
@@ -10,11 +10,13 @@ import {
   Tooltip,
   Box,
   CircularProgress,
+  Typography,
 } from "@mui/material";
 import FavoriteButton from "../FavoriteButton/FavoriteButton";
 import { DogData } from "../../types/dogData";
 import { useDogContext } from "../../hooks/useDogContext";
 import DetailsModal from "../DetailsModal/DetailsModal";
+
 interface DogListProps {
   dogList: DogData[];
   isMatches: boolean;
@@ -26,74 +28,74 @@ export default function DogList({ dogList, isMatches }: DogListProps) {
     null
   );
   const [openModal, setOpenModal] = useState(false);
-  const handleOpen = () => setOpenModal(true);
 
-  const handleImageClick = (dogDetails: DogData) => {
+  const handleImageClick = useCallback((dogDetails: DogData) => {
     setCurrentDogDetails(dogDetails);
-    handleOpen();
-  };
+    setOpenModal(true);
+  }, []);
 
   return (
     <>
       {isLoading ? (
         <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            height: "calc(100vh - 250px)",
-            maxHeight: "calc(100vh - 250px)",
-            overflowY: "auto",
-            padding: "20px 10px",
-          }}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="calc(100vh - 250px)"
         >
           <CircularProgress />
         </Box>
+      ) : dogList.length === 0 ? (
+        <Typography align="center" sx={{ mt: 3, color: "text.secondary" }}>
+          No dogs to display
+        </Typography>
       ) : (
-        <>
-          <Box
-            sx={{
-              maxHeight: "calc(100vh - 250px)",
-              overflowY: "auto",
-              padding: "0 10px",
-            }}
-          >
-            <List>
-              {dogList.length === 0 ? (
-                <>No dogs to display</>
-              ) : (
-                dogList.map((dog: DogData) => (
-                  <React.Fragment key={dog.id}>
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Tooltip
-                          title={`Click to see details of ${dog.name}`}
-                          arrow
-                        >
-                          <Avatar
-                            alt={dog.name}
-                            src={dog.img}
-                            sx={{ cursor: "pointer" }}
-                            onClick={() => handleImageClick(dog)}
-                          />
-                        </Tooltip>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={dog.name}
-                        secondary={`Breed: ${dog.breed} | Zipcode: ${dog.zip_code} | Age: ${dog.age}`}
+        <Box
+          sx={{
+            maxHeight: "calc(100vh - 250px)",
+            overflowY: "auto",
+            padding: "0 10px",
+            scrollbarWidth: "thin",
+          }}
+        >
+          <List>
+            {dogList.map((dog: DogData) => (
+              <React.Fragment key={dog.id}>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Tooltip
+                      title={`Click to see details of ${dog.name}`}
+                      arrow
+                    >
+                      <Avatar
+                        alt={dog.name}
+                        src={dog.img || "/placeholder.jpg"}
+                        sx={{ cursor: "pointer", width: 56, height: 56 }}
+                        onClick={() => handleImageClick(dog)}
+                        onError={(e) => {
+                          const img = e.currentTarget as HTMLImageElement;
+                          img.src = "/placeholder.jpg"; // ✅ No TypeScript error
+                        }}
                       />
-                      {!isMatches && (
-                        <ListItemIcon>
-                          <FavoriteButton dogId={dog.id} />
-                        </ListItemIcon>
-                      )}
-                    </ListItem>
-                    <Divider />
-                  </React.Fragment>
-                ))
-              )}
-            </List>
-          </Box>
-        </>
+                    </Tooltip>
+                  </ListItemAvatar>
+
+                  {/* Dog Info */}
+                  <ListItemText
+                    primary={dog.name}
+                    secondary={`Breed: ${dog.breed} | Zip: ${dog.zip_code} | Age: ${dog.age}`}
+                  />
+                  {!isMatches && (
+                    <ListItemIcon>
+                      <FavoriteButton dogId={dog.id} />
+                    </ListItemIcon>
+                  )}
+                </ListItem>
+                <Divider />
+              </React.Fragment>
+            ))}
+          </List>
+        </Box>
       )}
       <DetailsModal
         openModal={openModal}
