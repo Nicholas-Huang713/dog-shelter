@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useDogContext } from "../../hooks/useDogContext";
 import DogList from "../../components/DogList/DogList";
 import { Box, Typography, Button, Snackbar, Alert } from "@mui/material";
@@ -10,16 +10,16 @@ export default function Favorites() {
   const {
     favoriteDogDetailList,
     favoriteDogIdList,
-    getFavoriteDogs,
+    // getFavoriteDogs,
     createMatch,
   } = useDogContext();
 
   const [matchModalOpen, setMatchModalOpen] = useState(false);
   const [snackBarOpen, setSnackBarOpen] = useState(false);
 
-  useEffect(() => {
-    getFavoriteDogs();
-  }, [favoriteDogIdList]);
+  // useEffect(() => {
+  //   getFavoriteDogs();
+  // }, [favoriteDogIdList]);
 
   const handleMatching = useCallback(async () => {
     if (favoriteDogIdList.length < 2) {

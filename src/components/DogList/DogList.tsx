@@ -87,7 +87,7 @@ export default function DogList({ dogList, isMatches }: DogListProps) {
                   />
                   {!isMatches && (
                     <ListItemIcon>
-                      <FavoriteButton dogId={dog.id} />
+                      <FavoriteButton dogDetails={dog} />
                     </ListItemIcon>
                   )}
                 </ListItem>

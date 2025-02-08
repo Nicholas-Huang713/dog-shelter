@@ -2,37 +2,46 @@ import { useMemo, useState, useCallback } from "react";
 import { IconButton, Tooltip, Snackbar, Alert } from "@mui/material";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import { useDogContext } from "../../hooks/useDogContext";
-
+import { DogData } from "../../types/dogData";
 interface FavoriteButtonProps {
-  dogId: string;
+  dogDetails: DogData;
 }
 
-export default function FavoriteButton({ dogId }: FavoriteButtonProps) {
-  const { favoriteDogIdList, setFavoriteDogIdList } = useDogContext();
+export default function FavoriteButton({ dogDetails }: FavoriteButtonProps) {
+  const { id } = dogDetails;
+  const { favoriteDogIdList, setFavoriteDogIdList, setFavoriteDogDetailList } =
+    useDogContext();
   const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
 
   const isFavorite = useMemo(
-    () => favoriteDogIdList.includes(dogId),
-    [favoriteDogIdList, dogId]
+    () => favoriteDogIdList.includes(id),
+    [favoriteDogIdList, id]
   );
 
   const toggleFavorite = useCallback(() => {
     setFavoriteDogIdList((prevFavorites) => {
       const updatedFavorites = new Set(prevFavorites);
       let message = "";
-
-      if (updatedFavorites.has(dogId)) {
-        updatedFavorites.delete(dogId);
+      if (updatedFavorites.has(id)) {
+        updatedFavorites.delete(id);
+        setFavoriteDogDetailList((prevDogDetailList) => {
+          const updatedDogDetailList = prevDogDetailList.filter(
+            (dog) => dog.id !== id
+          );
+          return updatedDogDetailList;
+        });
         message = "Removed from Favorites";
       } else {
-        updatedFavorites.add(dogId);
+        updatedFavorites.add(id);
+        setFavoriteDogDetailList((prevDogDetailList) => {
+          return [dogDetails, ...prevDogDetailList]; // Add the new dog to the list
+        });
         message = "Added to Favorites";
       }
-
       setSnackbarMessage(message);
       return Array.from(updatedFavorites);
     });
-  }, [dogId, setFavoriteDogIdList]);
+  }, [id, setFavoriteDogIdList]);
 
   return (
     <>

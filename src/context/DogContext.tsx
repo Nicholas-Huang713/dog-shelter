@@ -6,7 +6,7 @@ import {
   fetchPreviousSetOfData,
   fetchDogListSorted,
   fetchDogListFilteredByBreed,
-  fetchFavoriteDogDetails,
+  // fetchFavoriteDogDetails,
   fetchMatchFromFaves,
 } from "../api/dogRoutes";
 
@@ -32,7 +32,6 @@ interface DogContextType {
   fetchIdsFilteredAndConvertToDetails: (filterType: string) => void;
   favoriteDogDetailList: DogData[];
   setFavoriteDogDetailList: React.Dispatch<React.SetStateAction<DogData[]>>;
-  getFavoriteDogs: () => void;
   createMatch: () => void;
   matchLoading: boolean;
   currentMatch: DogData | null;
@@ -209,18 +208,6 @@ export const DogProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const getFavoriteDogs = async () => {
-    setIsLoading(true);
-    try {
-      const res = await fetchFavoriteDogDetails(favoriteDogIdList);
-      setFavoriteDogDetailList(res ?? []);
-    } catch (e: any) {
-      handleError(e);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const createMatch = async () => {
     setMatchLoading(true);
     try {
@@ -268,7 +255,6 @@ export const DogProvider = ({ children }: { children: ReactNode }) => {
         fetchIdsFilteredAndConvertToDetails,
         favoriteDogDetailList,
         setFavoriteDogDetailList,
-        getFavoriteDogs,
         createMatch,
         matchLoading,
         currentMatch,

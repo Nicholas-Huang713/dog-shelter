@@ -94,7 +94,7 @@ const DetailsModal = ({
               {currentDogDetails?.name || "Unknown Dog"}
             </Typography>
             {currentDogDetails && (
-              <FavoriteButton dogId={currentDogDetails.id} />
+              <FavoriteButton dogDetails={currentDogDetails} />
             )}
           </Box>
           <Typography variant="body1">
