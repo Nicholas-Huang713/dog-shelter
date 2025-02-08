@@ -8,5 +8,6 @@ export const useNavigateTo = () => {
     goDogSearch: () => navigate("/dogSearch"),
     goLogin: () => navigate("/login"),
     goFavorites: () => navigate("/favorites"),
+    goMatches: () => navigate("/matches"),
   };
 };

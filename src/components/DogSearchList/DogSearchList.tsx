@@ -19,7 +19,7 @@ export default function DogSearchList() {
 
   return (
     <>
-      <DogList dogList={currentDogDetailList} />
+      <DogList dogList={currentDogDetailList} isMatches={false} />
       <div style={{ marginTop: 20 }}>
         <Button
           variant="contained"

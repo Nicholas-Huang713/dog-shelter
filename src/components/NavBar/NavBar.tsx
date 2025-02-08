@@ -17,7 +17,7 @@ import { handleLogout } from "../../api/auth";
 import { useNavigateTo } from "../../hooks/useNavigateTo";
 
 const loggedOutPages = ["Home"];
-const loggedInPages = ["Home", "Search", "Favorites"];
+const loggedInPages = ["Home", "Search", "Favorites", "Matches"];
 const settings = ["Profile", "Logout"];
 
 const NavBar = () => {
@@ -26,7 +26,8 @@ const NavBar = () => {
     () => (isAuthenticated ? loggedInPages : loggedOutPages),
     [isAuthenticated]
   );
-  const { goLogin, goDogSearch, goHome, goFavorites } = useNavigateTo();
+  const { goLogin, goDogSearch, goHome, goFavorites, goMatches } =
+    useNavigateTo();
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -57,6 +58,9 @@ const NavBar = () => {
           break;
         case "Favorites":
           goFavorites();
+          break;
+        case "Matches":
+          goMatches();
           break;
         case "Logout":
           handleCloseNavMenu();

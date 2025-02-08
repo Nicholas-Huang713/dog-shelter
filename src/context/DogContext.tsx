@@ -34,12 +34,18 @@ interface DogContextType {
   setFavoriteDogDetailList: React.Dispatch<React.SetStateAction<DogData[]>>;
   getFavoriteDogs: () => void;
   createMatch: () => void;
+  matchLoading: boolean;
+  currentMatch: DogData | null;
+  matches: DogData[];
+  matchIds: string[];
 }
 
 export const DogContext = createContext<DogContextType | null>(null);
 
 export const DogProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [matchLoading, setMatchLoading] = useState<boolean>(false);
+  const [currentMatch, setCurrentMatch] = useState<DogData | null>(null);
   const [currentDogDetailList, setCurrentDogDetailList] = useState<DogData[]>(
     []
   );
@@ -48,6 +54,8 @@ export const DogProvider = ({ children }: { children: ReactNode }) => {
   const [favoriteDogDetailList, setFavoriteDogDetailList] = useState<DogData[]>(
     []
   );
+  const [matches, setMatches] = useState<DogData[]>([]);
+  const [matchIds, setMatchIds] = useState<string[]>([]);
   const [nextUrl, setNextUrl] = useState<string>("");
   const [prevUrl, setPrevUrl] = useState<string>("");
   const [sortOption, setSortOption] = useState<string>("breedAsc");
@@ -211,10 +219,21 @@ export const DogProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const createMatch = async () => {
+    setMatchLoading(true);
     try {
-      const res = await fetchMatchFromFaves(favoriteDogIdList);
+      const matchResultId = await fetchMatchFromFaves(favoriteDogIdList);
+      const matchDetailsResult = await fetchDogDetailsList([
+        matchResultId.match,
+      ]);
+      if (!matchIds.includes(matchResultId.match)) {
+        setMatchIds([...matchIds, matchResultId.match]);
+        setMatches([...matches, matchDetailsResult[0]]);
+      }
+      setCurrentMatch(matchDetailsResult[0]);
     } catch (e: any) {
       handleError(e);
+    } finally {
+      setMatchLoading(false);
     }
   };
 
@@ -248,6 +267,10 @@ export const DogProvider = ({ children }: { children: ReactNode }) => {
         setFavoriteDogDetailList,
         getFavoriteDogs,
         createMatch,
+        matchLoading,
+        currentMatch,
+        matches,
+        matchIds,
       }}
     >
       {children}

@@ -68,7 +68,6 @@ export const fetchFavoriteDogDetails = async (faveIdList: string[]) => {
 export const fetchMatchFromFaves = async (faveIdList: string[]) => {
   try {
     const res = await apiClient.post("/dogs/match", faveIdList);
-    console.log("fetchMatchFromFaves", res.data); //should be this format string[]
     return res.data;
   } catch (e: any) {
     handleError(e);
