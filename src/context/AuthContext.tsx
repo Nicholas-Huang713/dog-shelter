@@ -5,6 +5,7 @@ interface AuthContextType {
   user: User | null;
   handleSetUser: (user: User) => void;
   handleRemoveUser: () => void;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);
@@ -24,7 +25,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, user, handleSetUser, handleRemoveUser }}
+      value={{
+        isAuthenticated,
+        user,
+        setUser,
+        handleSetUser,
+        handleRemoveUser,
+      }}
     >
       {children}
     </AuthContext.Provider>

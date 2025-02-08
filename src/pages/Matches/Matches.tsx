@@ -1,8 +1,10 @@
 import { Box, Typography } from "@mui/material";
 import DogList from "../../components/DogList/DogList";
 import { useDogContext } from "../../hooks/useDogContext";
+import { useAuthRedirect } from "../../hooks/useAuthRedirect";
 
 export default function Matches() {
+  useAuthRedirect();
   const { matches } = useDogContext();
 
   return (
