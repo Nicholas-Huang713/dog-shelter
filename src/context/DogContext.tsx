@@ -65,13 +65,16 @@ export const DogProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const fetchIdsSortedAndConvertToDetails = async (sortType: string) => {
+    setIsLoading(true);
     try {
       const res = await fetchDogListSorted(sortType);
       setCurrentDogIdList(res?.resultIds ?? []);
-      convertDogIdsToDetails(res?.resultIds ?? []);
+      await convertDogIdsToDetails(res?.resultIds ?? []);
       setNextUrl(res?.next ?? "");
     } catch (e) {
       handleError(e);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -80,7 +83,7 @@ export const DogProvider = ({ children }: { children: ReactNode }) => {
     try {
       const res = await fetchDogListFilteredByBreed(filterType);
       setCurrentDogIdList(res?.resultIds ?? []);
-      convertDogIdsToDetails(res?.resultIds ?? []);
+      await convertDogIdsToDetails(res?.resultIds ?? []);
       setNextUrl(res?.next ?? "");
     } catch (e) {
       handleError(e);
@@ -92,7 +95,7 @@ export const DogProvider = ({ children }: { children: ReactNode }) => {
   const getDefaultDogList = async () => {
     setIsLoading(true);
     try {
-      fetchIdsSortedAndConvertToDetails("breed:asc");
+      await fetchIdsSortedAndConvertToDetails("breed:asc");
     } catch (e: any) {
       handleError(e);
     } finally {

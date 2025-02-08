@@ -1,7 +1,8 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useCallback } from "react";
 import { IconButton, Tooltip, Snackbar, Alert } from "@mui/material";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import { useDogContext } from "../../hooks/useDogContext";
+
 interface FavoriteButtonProps {
   dogId: string;
 }
@@ -10,37 +11,41 @@ export default function FavoriteButton({ dogId }: FavoriteButtonProps) {
   const { favoriteDogIdList, setFavoriteDogIdList } = useDogContext();
   const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
 
-  const favoriteDogSet = useMemo(
-    () => new Set(favoriteDogIdList),
-    [favoriteDogIdList]
+  const isFavorite = useMemo(
+    () => favoriteDogIdList.includes(dogId),
+    [favoriteDogIdList, dogId]
   );
 
-  const toggleFavorite = (id: string) => {
-    setFavoriteDogIdList((prevFavorites: string[]) => {
-      const favoriteDogSet = new Set(prevFavorites);
-      if (favoriteDogSet.has(id)) {
-        favoriteDogSet.delete(id);
-        setSnackbarMessage("Removed from Favorites");
+  const toggleFavorite = useCallback(() => {
+    setFavoriteDogIdList((prevFavorites) => {
+      const updatedFavorites = new Set(prevFavorites);
+      let message = "";
+
+      if (updatedFavorites.has(dogId)) {
+        updatedFavorites.delete(dogId);
+        message = "Removed from Favorites";
       } else {
-        favoriteDogSet.add(id);
-        setSnackbarMessage("Added to Favorites");
+        updatedFavorites.add(dogId);
+        message = "Added to Favorites";
       }
-      return Array.from(favoriteDogSet);
+
+      setSnackbarMessage(message);
+      return Array.from(updatedFavorites);
     });
-  };
+  }, [dogId, setFavoriteDogIdList]);
 
   return (
     <>
       <Tooltip
-        title={`${favoriteDogSet.has(dogId) ? "Remove from" : "Add to"} Favorites`}
+        title={isFavorite ? "Remove from Favorites" : "Add to Favorites"}
         arrow
       >
-        <IconButton onClick={() => toggleFavorite(dogId)} edge="end">
-          {favoriteDogSet.has(dogId) ? <Favorite /> : <FavoriteBorder />}
+        <IconButton onClick={toggleFavorite} edge="end">
+          {isFavorite ? <Favorite color="error" /> : <FavoriteBorder />}
         </IconButton>
       </Tooltip>
       <Snackbar
-        open={!!snackbarMessage}
+        open={Boolean(snackbarMessage)}
         autoHideDuration={2000}
         onClose={() => setSnackbarMessage(null)}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}

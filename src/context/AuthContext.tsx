@@ -1,4 +1,4 @@
-import { createContext, useState, ReactNode } from "react";
+import { createContext, useState, ReactNode, useCallback } from "react";
 import { User } from "../types/user";
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -14,14 +14,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const handleSetUser = (user: User) => {
+  // const handleSetUser = (user: User) => {
+  //   setUser(user);
+  //   setIsAuthenticated(true);
+  // };
+  // const handleRemoveUser = () => {
+  //   setUser(null);
+  //   setIsAuthenticated(false);
+  // };
+
+  const handleSetUser = useCallback((user: User) => {
     setUser(user);
     setIsAuthenticated(true);
-  };
-  const handleRemoveUser = () => {
+  }, []);
+
+  const handleRemoveUser = useCallback(() => {
     setUser(null);
     setIsAuthenticated(false);
-  };
+  }, []);
 
   return (
     <AuthContext.Provider
