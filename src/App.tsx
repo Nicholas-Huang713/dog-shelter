@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import { CssBaseline, CircularProgress, Box } from "@mui/material";
 import { Suspense, lazy } from "react";
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -34,6 +39,7 @@ function App() {
             <NavBar />
             <Suspense fallback={<Loading />}>
               <Routes>
+                <Route path="/" element={<Navigate to="/home" replace />} />
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route
