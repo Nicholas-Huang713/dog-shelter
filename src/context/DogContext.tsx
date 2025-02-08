@@ -6,7 +6,6 @@ import {
   fetchPreviousSetOfData,
   fetchDogListSorted,
   fetchDogListFilteredByBreed,
-  // fetchFavoriteDogDetails,
   fetchMatchFromFaves,
 } from "../api/dogRoutes";
 

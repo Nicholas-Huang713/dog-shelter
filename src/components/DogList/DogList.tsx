@@ -74,7 +74,7 @@ export default function DogList({ dogList, isMatches }: DogListProps) {
                         onClick={() => handleImageClick(dog)}
                         onError={(e) => {
                           const img = e.currentTarget as HTMLImageElement;
-                          img.src = "/placeholder.jpg"; // ✅ No TypeScript error
+                          img.src = "/placeholder.jpg";
                         }}
                       />
                     </Tooltip>

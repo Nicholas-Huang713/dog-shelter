@@ -75,7 +75,6 @@ export default function Home() {
           </Grid>
         </Grid>
       </Container>
-
       <Box sx={{ bgcolor: "background.paper", p: 6, mt: 4 }} component="footer">
         <Typography variant="h6" align="center" gutterBottom>
           Dog Shelter

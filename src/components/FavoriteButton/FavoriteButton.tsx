@@ -34,7 +34,7 @@ export default function FavoriteButton({ dogDetails }: FavoriteButtonProps) {
       } else {
         updatedFavorites.add(id);
         setFavoriteDogDetailList((prevDogDetailList) => {
-          return [dogDetails, ...prevDogDetailList]; // Add the new dog to the list
+          return [dogDetails, ...prevDogDetailList];
         });
         message = "Added to Favorites";
       }

@@ -7,19 +7,11 @@ import { useAuthRedirect } from "../../hooks/useAuthRedirect";
 
 export default function Favorites() {
   useAuthRedirect();
-  const {
-    favoriteDogDetailList,
-    favoriteDogIdList,
-    // getFavoriteDogs,
-    createMatch,
-  } = useDogContext();
+  const { favoriteDogDetailList, favoriteDogIdList, createMatch } =
+    useDogContext();
 
   const [matchModalOpen, setMatchModalOpen] = useState(false);
   const [snackBarOpen, setSnackBarOpen] = useState(false);
-
-  // useEffect(() => {
-  //   getFavoriteDogs();
-  // }, [favoriteDogIdList]);
 
   const handleMatching = useCallback(async () => {
     if (favoriteDogIdList.length < 2) {

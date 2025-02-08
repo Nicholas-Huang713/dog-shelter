@@ -14,15 +14,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // const handleSetUser = (user: User) => {
-  //   setUser(user);
-  //   setIsAuthenticated(true);
-  // };
-  // const handleRemoveUser = () => {
-  //   setUser(null);
-  //   setIsAuthenticated(false);
-  // };
-
   const handleSetUser = useCallback((user: User) => {
     setUser(user);
     setIsAuthenticated(true);

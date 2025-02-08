@@ -79,8 +79,6 @@ const DetailsModal = ({
           }}
           onError={(e) => (e.currentTarget.src = "/placeholder.jpg")}
         />
-
-        {/* Dog Details */}
         <Box sx={{ flex: 1 }}>
           <Box
             sx={{
