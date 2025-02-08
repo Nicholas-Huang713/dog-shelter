@@ -1,50 +1,67 @@
-# React + TypeScript + Vite
+# Dog Shelter
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Description
 
-Currently, two official plugins are available:
+Users can login, search through a list of dogs, filter and sort the list, add dogs to their favorite list, and create a match based on their favorites. This project is a Vite-powered React app using TypeScript. This README will guide you through setting up and running the app locally.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Prerequisites
 
-## Expanding the ESLint configuration
+Before you begin, ensure you have the following installed on your machine:
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **Node.js** (v14.x or higher) - [Install Node.js](https://nodejs.org/en/)
+- **npm** or **yarn** - These come bundled with Node.js
 
-- Configure the top-level `parserOptions` property like this:
+## Getting Started
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### 1. Clone the Repository
+
+First, clone the repository to your local machine:
+
+```bash
+git clone https://github.com/Nicholas-Huang713/dog-shelter
+cd project-name
 ```
+### 2. Install Dependencies
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+Using npm:
+```bash
+npm install
 ```
+Using yarn:
+```bash
+yarn install
+```
+### 3. Run the Development Server
+After installing the dependencies, start the development server. This will start Vite, which will serve your app locally.
+
+Using npm:
+```bash
+npm run dev
+```
+Using yarn:
+```bash
+yarn dev
+```
+This will start the Vite development server, and you should see an output like this:
+
+```bash
+VITE v2.0.0  ready in 300ms
+
+  VITE v2.0.0  ready in 300ms
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use `--host` to expose
+
+```
+Open your browser and go to http://localhost:5173 to see the app running locally.
+
+
+
+
+
+
+
+
+
+
+
+
