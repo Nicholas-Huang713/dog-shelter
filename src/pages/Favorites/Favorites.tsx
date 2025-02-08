@@ -3,7 +3,10 @@ import { useDogContext } from "../../hooks/useDogContext";
 import DogList from "../../components/DogList/DogList";
 import { Box, Typography, Button, Snackbar, Alert } from "@mui/material";
 import MatchModal from "../../components/MatchModal/MatchModal";
+import { useAuthRedirect } from "../../hooks/useAuthRedirect";
+
 export default function Favorites() {
+  useAuthRedirect();
   const {
     favoriteDogDetailList,
     favoriteDogIdList,

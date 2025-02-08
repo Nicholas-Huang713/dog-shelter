@@ -26,7 +26,7 @@ const NavBar = () => {
     () => (isAuthenticated ? loggedInPages : loggedOutPages),
     [isAuthenticated]
   );
-  const { goLogin, goDogSearch, goHome, goFavorites, goMatches } =
+  const { goLogin, goDogSearch, goHome, goFavorites, goMatches, goProfile } =
     useNavigateTo();
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -62,6 +62,9 @@ const NavBar = () => {
         case "Matches":
           goMatches();
           break;
+        case "Profile":
+          goProfile();
+          break;
         case "Logout":
           handleCloseNavMenu();
           handleRemoveUser();
@@ -76,7 +79,15 @@ const NavBar = () => {
           return;
       }
     },
-    [goDogSearch, goHome, goFavorites, handleRemoveUser, goLogin, goMatches]
+    [
+      goDogSearch,
+      goHome,
+      goFavorites,
+      handleRemoveUser,
+      goLogin,
+      goMatches,
+      goProfile,
+    ]
   );
 
   return (

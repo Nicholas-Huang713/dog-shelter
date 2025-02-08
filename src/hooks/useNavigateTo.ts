@@ -9,5 +9,6 @@ export const useNavigateTo = () => {
     goLogin: () => navigate("/login"),
     goFavorites: () => navigate("/favorites"),
     goMatches: () => navigate("/matches"),
+    goProfile: () => navigate("/profile"),
   };
 };

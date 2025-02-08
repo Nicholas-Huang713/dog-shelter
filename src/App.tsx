@@ -11,6 +11,7 @@ const Login = lazy(() => import("./pages/Login/Login"));
 const DogSearch = lazy(() => import("./pages/DogSearch/DogSearch"));
 const Favorites = lazy(() => import("./pages/Favorites/Favorites"));
 const Matches = lazy(() => import("./pages/Matches/Matches"));
+const Profile = lazy(() => import("./pages/Profile/Profile"));
 
 const Loading = () => (
   <Box
@@ -46,6 +47,10 @@ function App() {
                 <Route
                   path="/matches"
                   element={<ProtectedRoute element={<Matches />} />}
+                />
+                <Route
+                  path="/profile"
+                  element={<ProtectedRoute element={<Profile />} />}
                 />
               </Routes>
             </Suspense>
