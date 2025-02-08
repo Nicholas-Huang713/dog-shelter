@@ -1,14 +1,27 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { CssBaseline } from "@mui/material";
+import { CssBaseline, CircularProgress, Box } from "@mui/material";
+import { Suspense, lazy } from "react";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import NavBar from "./components/NavBar/NavBar";
-import Home from "./pages/Home/Home";
-import Login from "./pages/Login/Login";
-import DogSearch from "./pages/DogSearch/DogSearch";
-import Favorites from "./pages/Favorites/Favorites";
 import { AuthProvider } from "./context/AuthContext";
 import { DogProvider } from "./context/DogContext";
-import Matches from "./pages/Matches/Matches";
+import NavBar from "./components/NavBar/NavBar";
+
+const Home = lazy(() => import("./pages/Home/Home"));
+const Login = lazy(() => import("./pages/Login/Login"));
+const DogSearch = lazy(() => import("./pages/DogSearch/DogSearch"));
+const Favorites = lazy(() => import("./pages/Favorites/Favorites"));
+const Matches = lazy(() => import("./pages/Matches/Matches"));
+
+const Loading = () => (
+  <Box
+    display="flex"
+    justifyContent="center"
+    alignItems="center"
+    height="100vh"
+  >
+    <CircularProgress />
+  </Box>
+);
 
 function App() {
   return (
@@ -18,22 +31,24 @@ function App() {
         <DogProvider>
           <Router>
             <NavBar />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route
-                path="/dogSearch"
-                element={<ProtectedRoute element={<DogSearch />} />}
-              />
-              <Route
-                path="/favorites"
-                element={<ProtectedRoute element={<Favorites />} />}
-              />
-              <Route
-                path="/matches"
-                element={<ProtectedRoute element={<Matches />} />}
-              />
-            </Routes>
+            <Suspense fallback={<Loading />}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route
+                  path="/dogSearch"
+                  element={<ProtectedRoute element={<DogSearch />} />}
+                />
+                <Route
+                  path="/favorites"
+                  element={<ProtectedRoute element={<Favorites />} />}
+                />
+                <Route
+                  path="/matches"
+                  element={<ProtectedRoute element={<Matches />} />}
+                />
+              </Routes>
+            </Suspense>
           </Router>
         </DogProvider>
       </AuthProvider>
