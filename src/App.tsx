@@ -1,4 +1,3 @@
-import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { CssBaseline } from "@mui/material";
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -9,6 +8,7 @@ import DogSearch from "./pages/DogSearch/DogSearch";
 import Favorites from "./pages/Favorites/Favorites";
 import { AuthProvider } from "./context/AuthContext";
 import { DogProvider } from "./context/DogContext";
+import Matches from "./pages/Matches/Matches";
 
 function App() {
   return (
@@ -28,6 +28,10 @@ function App() {
               <Route
                 path="/favorites"
                 element={<ProtectedRoute element={<Favorites />} />}
+              />
+              <Route
+                path="/matches"
+                element={<ProtectedRoute element={<Matches />} />}
               />
             </Routes>
           </Router>

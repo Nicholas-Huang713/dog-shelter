@@ -17,9 +17,10 @@ import { useDogContext } from "../../hooks/useDogContext";
 import DetailsModal from "../DetailsModal/DetailsModal";
 interface DogListProps {
   dogList: DogData[];
+  isMatches: boolean;
 }
 
-export default function DogList({ dogList }: DogListProps) {
+export default function DogList({ dogList, isMatches }: DogListProps) {
   const { isLoading } = useDogContext();
   const [currentDogDetails, setCurrentDogDetails] = useState<DogData | null>(
     null
@@ -80,9 +81,11 @@ export default function DogList({ dogList }: DogListProps) {
                         primary={dog.name}
                         secondary={`Breed: ${dog.breed} | Zipcode: ${dog.zip_code} | Age: ${dog.age}`}
                       />
-                      <ListItemIcon>
-                        <FavoriteButton dogId={dog.id} />
-                      </ListItemIcon>
+                      {!isMatches && (
+                        <ListItemIcon>
+                          <FavoriteButton dogId={dog.id} />
+                        </ListItemIcon>
+                      )}
                     </ListItem>
                     <Divider />
                   </React.Fragment>
