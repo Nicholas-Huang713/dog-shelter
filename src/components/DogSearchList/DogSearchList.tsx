@@ -14,7 +14,7 @@ export default function DogSearchList() {
   } = useDogContext();
 
   useEffect(() => {
-    getDefaultDogList();
+    if (currentDogDetailList.length === 0) getDefaultDogList();
   }, []);
 
   return (

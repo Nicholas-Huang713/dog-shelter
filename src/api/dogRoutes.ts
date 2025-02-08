@@ -56,14 +56,14 @@ export const fetchBreedList = async () => {
   }
 };
 
-export const fetchFavoriteDogDetails = async (faveIdList: string[]) => {
-  try {
-    const res = await apiClient.post("/dogs", faveIdList);
-    return res.data;
-  } catch (e: any) {
-    handleError(e);
-  }
-};
+// export const fetchFavoriteDogDetails = async (faveIdList: string[]) => {
+//   try {
+//     const res = await apiClient.post("/dogs", faveIdList);
+//     return res.data;
+//   } catch (e: any) {
+//     handleError(e);
+//   }
+// };
 
 export const fetchMatchFromFaves = async (faveIdList: string[]) => {
   try {
