@@ -76,7 +76,7 @@ const NavBar = () => {
           return;
       }
     },
-    [goDogSearch, goHome, goFavorites, handleRemoveUser, goLogin]
+    [goDogSearch, goHome, goFavorites, handleRemoveUser, goLogin, goMatches]
   );
 
   return (

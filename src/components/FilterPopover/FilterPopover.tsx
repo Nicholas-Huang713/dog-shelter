@@ -3,7 +3,6 @@ import {
   Popover,
   Box,
   Typography,
-  Button,
   FormControl,
   InputLabel,
   Select,
@@ -27,7 +26,6 @@ export default function FilterPopover({
   setAnchorEl,
 }: FilterPopoverProps) {
   const { fetchIdsFilteredAndConvertToDetails } = useDogContext();
-  const [selectedFilter, setSelectedFilter] = useState<string>("");
   const [selectedBreed, setSelectedBreed] = useState<string>("");
   const [breedOptions, setBreedOptions] = useState<string[]>([]);
 
@@ -46,11 +44,6 @@ export default function FilterPopover({
   const handleBreedSelection = (e: SelectChangeEvent<string>) => {
     setSelectedBreed(e.target.value);
     fetchIdsFilteredAndConvertToDetails(e.target.value);
-    setAnchorEl(null);
-  };
-
-  const handleSelect = (filter: string) => {
-    setSelectedFilter(filter);
     setAnchorEl(null);
   };
 
@@ -74,9 +67,6 @@ export default function FilterPopover({
         <Typography variant="h6" gutterBottom>
           Filter Options
         </Typography>
-        <Button variant="outlined" fullWidth sx={{ mb: 1 }}>
-          Filter by Name
-        </Button>
         <FormControl size="small" fullWidth sx={{ mb: 2 }}>
           <InputLabel>Filter by Breed</InputLabel>
           <Select
@@ -91,9 +81,6 @@ export default function FilterPopover({
             ))}
           </Select>
         </FormControl>
-        <Button variant="outlined" fullWidth>
-          Filter by Zipcode
-        </Button>
       </Box>
     </Popover>
   );
